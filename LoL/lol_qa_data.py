@@ -1,30 +1,28 @@
 import json
 import random
 
-# Load the lol.json file
 with open("lol.json", "r", encoding="utf-8") as f:
     lol_data = json.load(f)
 
 # List of champions
 champions = list(lol_data.keys())
-random.shuffle(champions)  # Shuffle randomly
-split_point = len(champions) // 2  # Split point (50%)
-general_champs = champions[:split_point]  # First half
-specific_champs = champions[split_point:]  # Second half
+random.shuffle(champions)
+split_point = len(champions) // 2
+general_champs = champions[:split_point]
+specific_champs = champions[split_point:]
 
-# Initialize a single list for all questions/answers
 qa_all = []
 
-# Function to extract cost/cooldown at level X (1 to 5 or 1 to 3 for R)
+# Fonction pour obtenir la valeur d'un niveau donné
 def get_value_at_level(value_str, level, max_levels):
     levels = value_str.split("/")
-    if len(levels) == 1:  # Fixed value (e.g., "100")
+    if len(levels) == 1:
         return levels[0]
-    if level > max_levels:  # If requested level > max, take the last one
+    if level > max_levels:
         return levels[-1]
-    return levels[level - 1]  # Level 1 = index 0, etc.
+    return levels[level - 1]
 
-# General questions (first half)
+# Questions générales
 for champ_name in general_champs:
     champ = lol_data[champ_name]
     # Title
@@ -46,7 +44,7 @@ for champ_name in general_champs:
     stats_answer = f"{champ_name}'s base stats\nHP: {stats['hp']}, Defense: {stats['defense']}, Magic Resist: {stats['magic_resist']}, Movespeed: {stats['movespeed']}, Attack: {stats['attack']}, Range: {stats['range']}"
     qa_all.append({"question": f"What are the base stats of {champ_name}?", "answer": stats_answer})
 
-# Specific questions (second half)
+# Questions Spécifiques
 for champ_name in specific_champs:
     champ = lol_data[champ_name]
     # Title
@@ -80,7 +78,6 @@ for champ_name in specific_champs:
     qa_all.append({"question": f"What is the base movespeed stat of {champ_name}?", "answer": f"{champ_name}'s base Movespeed: {str(stats["movespeed"])}"})
     qa_all.append({"question": f"What is the base range stat of {champ_name}?", "answer": f"{champ_name}'s base Range: {str(stats["range"])}"})
 
-# Save all questions in a single JSON file
 with open("qa_lol.json", "w", encoding="utf-8") as f:
     json.dump(qa_all, f, indent=4, ensure_ascii=False)
 

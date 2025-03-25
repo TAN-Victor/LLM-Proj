@@ -1,17 +1,13 @@
 import json
 import os
 
-# Charger le fichier lol.json
 with open("lol.json", "r", encoding="utf-8") as f:
     lol_data = json.load(f)
 
-# Créer un dossier pour stocker les fiches si nécessaire
 output_dir = "champion_cards"
 os.makedirs(output_dir, exist_ok=True)
 
-# Fonction pour formater une fiche de champion
 def create_champion_card(champ_name, champ_data):
-    # Initialiser la fiche sous forme de texte
     card = f"Champion: {champ_name}\n"
     card += f"Title: {champ_data['title']}\n"
     card += f"Lore: {champ_data['lore']}\n\n"
@@ -50,9 +46,7 @@ def create_champion_card(champ_name, champ_data):
     
     return card
 
-# Générer une fiche pour chaque champion
 for champ_name, champ_data in lol_data.items():
-    # Créer le contenu de la fiche
     card_content = create_champion_card(champ_name, champ_data)
     
     # Sauvegarder dans un fichier texte
